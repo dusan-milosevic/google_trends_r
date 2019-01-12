@@ -1,0 +1,54 @@
+---
+title: "google trends with R"
+author: "Dusan Milosevic"
+date: "December 27, 2018"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# install.packages("gtrendsR")
+
+library(gtrendsR)
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+```
+
+## Google Trends
+```{r}
+## UK query
+allEventsUK <- gtrends(keyword = c("Christmas", "Thanksgiving", "Halloween", "Black Friday"),
+                       time = "2017-01-01 2017-12-31",
+                       geo = "GB")
+
+allEventsUK <- allEventsUK$interest_over_time %>%
+               mutate(hits = as.numeric(ifelse(hits == "<1", 0, hits)))
+
+## US query 
+allEventsUS <- gtrends(keyword = c("Christmas", "Thanksgiving",
+                                   "Halloween", "Black Friday"),
+                                    time = "2017-01-01 2017-12-31",
+                                    geo = "US")
+
+allEventsUS <- allEventsUS$interest_over_time %>%
+               mutate(hits = as.numeric(ifelse(hits == "<1", 0, hits)))
+
+# Combine UK and US data
+allEvents <- rbind(allEventsUK, allEventsUS)
+
+# Plot
+plot <- allEvents %>% 
+  ggplot(aes(date, hits, colour = keyword)) + 
+  geom_line(size = 1) +
+  facet_wrap(~ geo) +
+  scale_x_datetime(limits = c(as.POSIXct("2017-07-01"), NA)) +
+  theme_minimal()
+
+plot
+```
+
+
