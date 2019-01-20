@@ -4,6 +4,8 @@ gtrendsR provides an interface for retrieving search terms provided by Google Tr
 - Change time range 
 - Compare 5 search terms at once
 
+example thanks to http://www.storybench.org/mapping-search-data-from-google-trends-in-r/
+
 ## Google Trends comparing Christman, Thanksgiving, Halloween, Black Friday
 
 ![picture alt](https://github.com/dusan-milosevic/google_trends_r/blob/master/img/special_days_compare_US_UK.png)
